@@ -24,8 +24,8 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v12
       - name: setup attic-ci as a trusted substitutor
         run: |
-          echo 'trusted-substituters = https://staging.attic.rs/attic-ci' | sudo tee -a /etc/nix/nix.conf
-          echo 'trusted-public-keys = attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo=' | sudo tee -a /etc/nix/nix.conf
+          echo 'trusted-substituters = https://staging.attic.rs/attic-ci https://cache.nixos.org' | sudo tee -a /etc/nix/nix.conf
+          echo 'trusted-public-keys = attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' | sudo tee -a /etc/nix/nix.conf
       - name: install cloudflared
         run: nix profile install nixpkgs#cloudflared
       - name: build and install attic
