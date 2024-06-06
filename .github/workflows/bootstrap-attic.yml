@@ -48,6 +48,7 @@ jobs:
           while [ $time_left -gt 0 ]
           do
             echo "WF exits in $time_left minutes"
+            cat cloudflared.log
             sleep 60
             ((time_left--))
           done
