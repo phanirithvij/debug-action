@@ -42,13 +42,17 @@ jobs:
         #   attic login local http://localhost:3344
         #   attic cache create local:atticcache --public
         #   attic push local:atticcache $(which attic)
-      - name: wait for 30min
-        run: |
-          time_left=30
-          while [ $time_left -gt 0 ]
-          do
-            echo "WF exits in $time_left minutes"
-            cat cloudflared.log
-            sleep 60
-            ((time_left--))
-          done
+      # crazy thing, magic-nix-cache runs on top of attic
+      # TODO find the public key!
+      - name: Debugging with browser
+        uses: fawazahmed0/action-debug@v2
+      # - name: wait for 30min
+      #   run: |
+      #     time_left=30
+      #     while [ $time_left -gt 0 ]
+      #     do
+      #       echo "WF exits in $time_left minutes"
+      #       cat cloudflared.log
+      #       sleep 60
+      #       ((time_left--))
+      #     done
