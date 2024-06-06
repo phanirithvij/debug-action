@@ -1,0 +1,52 @@
+# GHA backed attic server for nix binary caches
+# This workflow does something weird and crazy
+# - It builds attic and runs it and exposes it in a cloudflare tunnel
+# -- * Then one can use that url as a substitutor and install attic
+# -- * This can be extended to build anything and expose it via attic
+# - Why not use cachix? good question, maybe because it is not oss
+# - Also caches nix store in github actions cache
+# TODO:
+# other whacky ideas
+# - push to a list of minio backed private attic servers
+#   without exposing their endpoints (github secrets)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  buildattic:
+    name: Build attic
+    runs-on: ubuntu-latest
+    steps:
+        # enables flakes, nix-command, sets runner as trusted user
+        # so we can use substitutors as runner for any subsequent nix commands
+      - name: install nix
+        uses: DeterminateSystems/nix-installer-action@v12
+      - name: setup attic-ci as a trusted substitutor
+        run: |
+          echo 'trusted-substituters = https://staging.attic.rs/attic-ci' | sudo tee -a /etc/nix/nix.conf
+          echo 'trusted-public-keys = attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo=' | sudo tee -a /etc/nix/nix.conf
+      - name: install cloudflared
+        run: nix profile install nixpkgs#cloudflared
+      - name: build and install attic
+        run: |
+          nix run nixpkgs#nix-output-monitor -- build  https://github.com/zhaofengli/attic/tarball/main
+          nix profile install  https://github.com/zhaofengli/attic/tarball/main
+      # optionally configure a fixed cloudflare tunnel endpoint (requires login)
+      # - name: configure cloudflare tunnel endpoint
+      - name: start and expose attic server
+        timeout-minutes: 30
+        run: |
+          atticd -l localhost:3344
+          attic login local http://localhost:3344
+          attic cache create local:atticcache --public
+          attic push local:atticcache $(which attic)
+      - name: 30min timeout
+        run: |
+          time_left=30
+          while [ $time_left -gt 0 ]
+          do
+            echo "$time_left minute(s) left"
+            sleep 60
+            ((time_left--))
+          done
