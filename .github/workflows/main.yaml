@@ -1,0 +1,10 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    name: jusdoit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Debugging with browser
+      uses: fawazahmed0/action-debug@v2
