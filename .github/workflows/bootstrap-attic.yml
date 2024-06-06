@@ -30,8 +30,8 @@ jobs:
         run: nix profile install nixpkgs#cloudflared
       - name: build and install attic
         run: |
-          nix run nixpkgs#nix-output-monitor -- build  https://github.com/zhaofengli/attic/tarball/main
-          nix profile install  https://github.com/zhaofengli/attic/tarball/main
+          nix build -L https://github.com/zhaofengli/attic/tarball/main
+          nix profile install https://github.com/zhaofengli/attic/tarball/main
       # optionally configure a fixed cloudflare tunnel endpoint (requires login)
       # - name: configure cloudflare tunnel endpoint
       - name: start and expose attic server
