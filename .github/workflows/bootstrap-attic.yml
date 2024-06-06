@@ -9,6 +9,8 @@
 # other whacky ideas
 # - push to a list of minio backed private attic servers
 #   without exposing their endpoints (github secrets)
+# - seems like attic is not required, detsys magic cache runs a server it can be used
+#   so, attic need not be run. But this is at the mercy of github and detsys
 
 on:
   workflow_dispatch:
@@ -32,19 +34,20 @@ jobs:
           nix profile install https://github.com/zhaofengli/attic/tarball/main
       # optionally configure a fixed cloudflare tunnel endpoint (requires login)
       # - name: configure cloudflare tunnel endpoint
-      - name: start and expose attic server
-        timeout-minutes: 30
+      - name: expose magic-cache server
         run: |
-          atticd -l 127.0.0.1:3344
-          attic login local http://localhost:3344
-          attic cache create local:atticcache --public
-          attic push local:atticcache $(which attic)
-      - name: 30min timeout
+          cloudflared tunnel --url http://localhost:37515 > cloudflared.log 2>&1 &
+        # run: |
+        #   atticd -l 127.0.0.1:3344
+        #   attic login local http://localhost:3344
+        #   attic cache create local:atticcache --public
+        #   attic push local:atticcache $(which attic)
+      - name: wait for 30min
         run: |
           time_left=30
           while [ $time_left -gt 0 ]
           do
-            echo "$time_left minute(s) left"
+            echo "WF exits in $time_left minutes"
             sleep 60
             ((time_left--))
           done
