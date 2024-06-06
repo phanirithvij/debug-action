@@ -35,7 +35,7 @@ jobs:
       - name: start and expose attic server
         timeout-minutes: 30
         run: |
-          atticd -l localhost:3344
+          atticd -l 127.0.0.1:3344
           attic login local http://localhost:3344
           attic cache create local:atticcache --public
           attic push local:atticcache $(which attic)
