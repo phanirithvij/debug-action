@@ -83,4 +83,4 @@ jobs:
           done
           EOF
           chmod +x loop.sh
-          source ./loop.sh
+          bash ./loop.sh
