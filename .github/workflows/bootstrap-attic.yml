@@ -39,10 +39,9 @@ jobs:
       # - name: configure cloudflare tunnel endpoint
       - name: keypair for nix-serve
         run: |
-          cd /var
           nix-store --generate-binary-cache-key gha-magic-cache-1 cache-priv-key.pem cache-pub-key.pem
           cat cache-pub-key.pem
-          export NIX_SECRET_KEY_FILE=/var/cache-priv-key.pem
+          export NIX_SECRET_KEY_FILE=$PWD/cache-priv-key.pem
           nix-serve --listen :5000 --daemonize
       - name: expose nix-serve server
         run: |
