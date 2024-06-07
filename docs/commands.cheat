@@ -1,0 +1,5 @@
+% gha, cache
+
+# check cache usage
+gh cache list -S size_in_bytes --json sizeInBytes -L 300000 | jq '[.[].sizeInBytes] | add' | numfmt --to=iec-i --suffix=B --format="%9.2f"
+
