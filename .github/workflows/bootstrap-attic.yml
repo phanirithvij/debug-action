@@ -15,10 +15,10 @@ jobs:
             echo "WF exits in \$((time_left/60))m \$((time_left%60))s"
             cat cache-pub-key.pem
             sleep 5
-            cat cloudflared.log | grep -E 'https.*trycloudflare.com'
+            cat cloudflared.log | grep -E 'https.*trycloudflare.com' | cut -d "|" -f 2 | tr -s "[:blank:]"
             sleep 5
             cat cache-pub-key.pem
-            cat cloudflared.log | grep -E 'https.*trycloudflare.com'
+            cat cloudflared.log | grep -E 'https.*trycloudflare.com' | cut -d "|" -f 2 | tr -s "[:blank:]"
             ((time_left=time_left-10))
           done
           EOF
@@ -56,8 +56,8 @@ jobs:
         #   attic cache create local:atticcache --public
         #   attic push local:atticcache $(which attic)
       # crazy thing, magic-nix-cache runs on top of attic
-      - name: Debugging with browser
-        uses: fawazahmed0/action-debug@v2
+      # - name: Debugging with browser
+      #   uses: fawazahmed0/action-debug@v2
       # https://sourcegraph.com/github.com/osdev-wiki/wiki/-/blob/.github/workflows/sitegen.yml?L43:13-43:25
       - name: cache dependency builds
         uses: actions/cache@v2
