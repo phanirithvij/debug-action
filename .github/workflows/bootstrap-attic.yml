@@ -11,6 +11,9 @@
 #   without exposing their endpoints (github secrets)
 # - seems like attic is not required, detsys magic cache runs a server it can be used
 #   so, attic need not be run. But this is at the mercy of github and detsys
+# - never mind, attic or something is required, because magic-cache doesn't sign packages
+#   and public key is not known
+# - so running a nix-serve with temporary private/public keypair
 
 on:
   workflow_dispatch:
@@ -34,25 +37,33 @@ jobs:
           nix profile install https://github.com/zhaofengli/attic/tarball/main
       # optionally configure a fixed cloudflare tunnel endpoint (requires login)
       # - name: configure cloudflare tunnel endpoint
-      - name: expose magic-cache server
+      - name: keypair for nix-serve
         run: |
-          cloudflared tunnel --url http://localhost:37515 > cloudflared.log 2>&1 &
+          cd /var
+          nix-store --generate-binary-cache-key gha-magic-cache-1 cache-priv-key.pem cache-pub-key.pem
+          cat cache-pub-key.pem
+          export NIX_SECRET_KEY_FILE=/var/cache-priv-key.pem
+          nix-serve --listen :5000 --daemonize
+      - name: expose nix-serve server
+        run: |
+          cloudflared tunnel --url http://localhost:5000 > cloudflared.log 2>&1 &
         # run: |
         #   atticd -l 127.0.0.1:3344
         #   attic login local http://localhost:3344
         #   attic cache create local:atticcache --public
         #   attic push local:atticcache $(which attic)
       # crazy thing, magic-nix-cache runs on top of attic
-      # TODO find the public key!
-      - name: Debugging with browser
-        uses: fawazahmed0/action-debug@v2
-      # - name: wait for 30min
-      #   run: |
-      #     time_left=30
-      #     while [ $time_left -gt 0 ]
-      #     do
-      #       echo "WF exits in $time_left minutes"
-      #       cat cloudflared.log
-      #       sleep 60
-      #       ((time_left--))
-      #     done
+      # - name: Debugging with browser
+      #   uses: fawazahmed0/action-debug@v2
+      - name: wait for 30min
+        run: |
+          time_left=$((30*60))
+          while [ $time_left -gt 0 ]
+          do
+            echo "WF exits in $((time_left/60))m $((time_left%60))s"
+            cat cloudflared.log | grep trycloudflare.com
+            sleep 5
+            cat cloudflared.log | grep trycloudflare.com
+            sleep 5
+            ((time_left=time_left-10))
+          done
