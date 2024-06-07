@@ -54,6 +54,13 @@ jobs:
       # crazy thing, magic-nix-cache runs on top of attic
       # - name: Debugging with browser
       #   uses: fawazahmed0/action-debug@v2
+      # https://sourcegraph.com/github.com/osdev-wiki/wiki/-/blob/.github/workflows/sitegen.yml?L43:13-43:25
+      - name: cache dependency builds
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/nix/*sqlite*
+          key: ${{ runner.os }}
       - name: wait for 30min
         shell: bash
         run: |
@@ -61,6 +68,9 @@ jobs:
           while [ $time_left -gt 0 ]
           do
             echo "WF exits in $((time_left/60))m $((time_left%60))s"
+            ls
+            pwd
+            ls -l
             cat cloudflared.log | grep -E 'https.*trycloudflare.com'
             sleep 5
             cat cloudflared.log | grep -E 'https.*trycloudflare.com'
