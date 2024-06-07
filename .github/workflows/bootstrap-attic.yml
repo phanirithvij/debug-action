@@ -1,20 +1,3 @@
-# GHA backed attic server for nix binary caches
-# This workflow does something weird and crazy
-# - It builds attic and runs it and exposes it in a cloudflare tunnel
-# -- * Then one can use that url as a substitutor and install attic
-# -- * This can be extended to build anything and expose it via attic
-# - Why not use cachix? good question, maybe because it is not oss
-# - Also caches nix store in github actions cache
-# TODO:
-# other whacky ideas
-# - push to a list of minio backed private attic servers
-#   without exposing their endpoints (github secrets)
-# - seems like attic is not required, detsys magic cache runs a server it can be used
-#   so, attic need not be run. But this is at the mercy of github and detsys
-# - never mind, attic or something is required, because magic-cache doesn't sign packages
-#   and public key is not known
-# - so running a nix-serve with temporary private/public keypair
-
 on:
   workflow_dispatch:
 
