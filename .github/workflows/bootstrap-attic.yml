@@ -23,14 +23,13 @@ jobs:
     name: Build attic
     runs-on: ubuntu-latest
     steps:
-      - name: wait for 30min
-        shell: bash
+      - shell: bash
         run: |
           cat << EOF > loop.sh
-          time_left=$((30*60))
-          while [ $time_left -gt 0 ]
+          time_left=\$((30*60))
+          while [ \$time_left -gt 0 ]
           do
-            echo "WF exits in $((time_left/60))m $((time_left%60))s"
+            echo "WF exits in \$((time_left/60))m \$((time_left%60))s"
             cat cache-pub-key.pem
             sleep 5
             cat cloudflared.log | grep -E 'https.*trycloudflare.com'
@@ -84,3 +83,5 @@ jobs:
           path: |
             ~/.cache/nix/*sqlite*
           key: ${{ runner.os }}
+      - run: loop.sh
+        shell: bash
