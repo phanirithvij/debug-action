@@ -52,8 +52,8 @@ jobs:
         #   attic cache create local:atticcache --public
         #   attic push local:atticcache $(which attic)
       # crazy thing, magic-nix-cache runs on top of attic
-      # - name: Debugging with browser
-      #   uses: fawazahmed0/action-debug@v2
+      - name: Debugging with browser
+        uses: fawazahmed0/action-debug@v2
       - name: wait for 30min
         run: |
           time_left=$((30*60))
