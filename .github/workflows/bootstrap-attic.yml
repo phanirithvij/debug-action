@@ -9,7 +9,7 @@ jobs:
       - shell: bash
         run: |
           cat << EOF > loop.sh
-          time_left=\$((30*60))
+          time_left=\$((30*60-20))
           while [ \$time_left -gt 0 ]
           do
             echo "WF exits in \$((time_left/60))m \$((time_left%60))s"
