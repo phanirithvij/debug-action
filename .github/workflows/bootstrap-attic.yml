@@ -63,7 +63,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cache/nix/*sqlite*
+            ~/.cache/nix/
           key: ${{ runner.os }}
       - run: ./loop.sh
         shell: bash
