@@ -40,7 +40,6 @@ jobs:
           done
           EOF
           chmod +x loop.sh
-          cat ./loop.sh
         # enables flakes, nix-command, sets runner as trusted user
       - uses: DeterminateSystems/nix-installer-action@v12
       - uses: DeterminateSystems/magic-nix-cache-action@main
@@ -83,5 +82,5 @@ jobs:
           path: |
             ~/.cache/nix/*sqlite*
           key: ${{ runner.os }}
-      - run: loop.sh
+      - run: ./loop.sh
         shell: bash
