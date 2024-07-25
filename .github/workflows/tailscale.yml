@@ -13,3 +13,5 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
           version: 1.70.0
+      - name: Debugging with browser
+        uses: fawazahmed0/action-debug@v2
