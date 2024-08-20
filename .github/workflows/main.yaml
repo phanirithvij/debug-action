@@ -4,7 +4,7 @@ on:
 jobs:
   debug:
     name: jusdoit
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - name: Debugging with browser
       uses: fawazahmed0/action-debug@v2
