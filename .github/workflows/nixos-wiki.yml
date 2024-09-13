@@ -1,0 +1,22 @@
+name: Download and Upload NixOS Wiki Dump
+
+on:
+  workflow_dispatch: # Trigger manually, you can also change this to 'schedule' for automation
+
+jobs:
+  download-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download NixOS Wiki Dump
+        run: |
+          curl -LO https://wiki.nixos.org/wikidump.xml.zst
+          ls -lh wikidump.xml.zst  # List the file to verify download
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nixos-wiki-dump
+          path: wikidump.xml.zst
