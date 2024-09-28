@@ -6,5 +6,6 @@ jobs:
     name: jusdoit
     runs-on: macos-latest
     steps:
+    - uses: DeterminateSystems/nix-installer-action@v14
     - name: Debugging with browser
       uses: fawazahmed0/action-debug@v2
