@@ -10,4 +10,4 @@ jobs:
           git clone https://github.com/phanirithvij/nixpkgs --depth 1 --branch swapspace-module-no-pr
           cd nixpkgs
           nix-build -A nixosTests.swapspace
-          for i in {1..50}; do nix-build -A nixosTests.swapspace --check; done
+          for i in {1..100}; do echo $i > run; nix-build -A nixosTests.swapspace --check || break; done
