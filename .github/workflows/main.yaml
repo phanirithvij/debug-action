@@ -10,8 +10,9 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: phanirithvij/system
-    - run: ls -l
-    - run: nix build .#homeConfigurations."runner".activationPackage
-    - run: nix run .#home-manager -- switch --flake . -b bak
     - name: Debugging with browser
       uses: fawazahmed0/action-debug@v2
+    - run: ls -l
+    - run: nix flake show --allow-import-from-derivation
+    - run: nix build .#homeConfigurations."runner".activationPackage
+    - run: nix run .#home-manager -- switch --flake . -b bak
