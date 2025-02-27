@@ -1,0 +1,22 @@
+name: site-deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  contents: read #  to fetch code (actions/checkout)
+
+jobs:
+  build:
+    name: Make and Deploy site
+    runs-on: ubuntu-latest
+    environment: netlify
+    container: golang:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+      - run: node -v && npm -v
