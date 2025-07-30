@@ -4,15 +4,13 @@ on:
 jobs:
   debug:
     name: jusdoit
-    runs-on: macos-13
+    runs-on: macos-latest
+    # runs-on: macos-13
     steps:
     - uses: DeterminateSystems/nix-installer-action@v14
     - uses: actions/checkout@v4
       with:
         repository: phanirithvij/system
+    - run: nix build .#homeConfigurations."runner".activationPackage --impure && ./result/activate
     - name: Debugging with browser
       uses: fawazahmed0/action-debug@v2
-    - run: ls -l
-    - run: nix flake show --allow-import-from-derivation
-    - run: nix build .#homeConfigurations."runner".activationPackage
-    - run: nix run .#home-manager -- switch --flake . -b bak
