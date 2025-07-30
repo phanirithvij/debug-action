@@ -4,7 +4,7 @@ on:
 jobs:
   debug:
     name: jusdoit
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
     - uses: DeterminateSystems/nix-installer-action@v14
     - uses: actions/checkout@v4
