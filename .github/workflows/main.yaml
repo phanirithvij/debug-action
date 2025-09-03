@@ -11,6 +11,6 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: phanirithvij/system
-    - run: nix build .#homeConfigurations."runner".activationPackage --impure && ./result/activate
+    #- run: nix build .#homeConfigurations."runner".activationPackage --impure && ./result/activate
     - name: Debugging with browser
       uses: fawazahmed0/action-debug@v2
