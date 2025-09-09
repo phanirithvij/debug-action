@@ -1,0 +1,18 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - run: |
+        iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+        scoop install ngrok --global
+    - run: C:\ProgramData\scoop\shims\ngrok.exe config add-authtoken $Env:NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "Idli3sh1b@iiNu" -Force)
+    - run: C:\ProgramData\scoop\shims\ngrok.exe tcp 3389 --log stdout
