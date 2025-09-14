@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: nixbuild/nix-quick-install-action@master
       - run: |
           git clone https://github.com/phanirithvij/nixpkgs --depth 1 --branch swapspace-module-no-pr
           cd nixpkgs

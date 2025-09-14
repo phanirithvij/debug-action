@@ -7,7 +7,7 @@ jobs:
     runs-on: macos-latest
     # runs-on: macos-13
     steps:
-    - uses: DeterminateSystems/nix-installer-action@v14
+    - uses: nixbuild/nix-quick-install-action@master
     - uses: actions/checkout@v4
       with:
         repository: phanirithvij/system
